@@ -1,0 +1,19 @@
+// Script to run in a Scheduled Data Import or Scripted Data Source
+(function execute(inputs, outputs) {
+    var csvData = inputs.csvData; // assume this is passed or retrieved
+    var lines = csvData.split('\n');
+    var headers = lines[0].split(',');
+
+    for (var i = 1; i < lines.length; i++) {
+        var data = lines[i].split(',');
+
+        var gr = new GlideRecord('u_custom_table'); // Replace with your table name
+        gr.initialize();
+
+        for (var j = 0; j < headers.length; j++) {
+            gr.setValue(headers[j].trim(), data[j].trim());
+        }
+
+        gr.insert();
+    }
+})(inputs, outputs);
